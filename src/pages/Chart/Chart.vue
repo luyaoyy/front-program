@@ -1,11 +1,9 @@
 <template>
   <div style="width: 100%;height: 1000px;">
-    11
     <div style="overflow: hidden">
       <el-tag type="warning" class="dark">
         <i class="el-icon-s-order"></i>
-        <span class="title">累计票房:</span><span class="content"><countTo :startVal='0' :endVal='totalMoney'
-                                                                       :duration='2500'></countTo>￥</span>
+        <span class="title">累计票房:</span><span class="content"><countTo :startVal='0' :endVal='totalMoney' :duration='2500'></countTo>￥</span>
       </el-tag>
       <el-tag type="info" class="dark">
         <i class="el-icon-user"></i>
