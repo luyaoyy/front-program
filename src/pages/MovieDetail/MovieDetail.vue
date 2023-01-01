@@ -13,7 +13,13 @@
           <p class="time">{{ $store.state.movie.mtime }}在中国大陆上映</p>
           <p>
             <button class="btn" @click="showCommentDialog"><i class="el-icon-edit"></i>评分</button>
-            <button class="btn"><i class="el-icon-star-off"></i>收藏</button>
+            <button class="btn" @click="handleFavorite('add')" v-if="!$store.state.isFavorite"><i
+                class="iconfont icon-kongxin"
+                style="font-size: 22px;vertical-align: middle;margin-right: 3px"></i>收藏
+            </button>
+            <button class="btn" @click="handleFavorite('del')" v-else><i class="iconfont icon-aixin"
+                                                                         style="font-size: 16px;color: red;margin-right: 3px"></i>已收藏
+            </button>
           </p>
           <button class="buy" @click="showSession" v-show="$route.path=='/UserHomePage/MovieDetail'">选座购票</button>
           <button class="buy" @click="handleBack" v-show="$route.path=='/UserHomePage/MovieDetail/MovieSession'">
@@ -64,7 +70,8 @@ export default {
     return {
       isShowCommentDialog: false,
       grade: 0,
-      content: ''
+      content: '',
+      isFavorite: false
     }
   },
   methods: {
@@ -79,6 +86,24 @@ export default {
         this.$alert("请您登入后评论!")
       } else {
         this.isShowCommentDialog = true
+      }
+    },
+    handleFavorite(type) {
+      if (JSON.stringify(this.$store.state.user) == '{}') {
+        this.$router.push("/out")
+      } else {
+        requests({
+          method: 'post',
+          url: 'http://localhost:8081/ssm/AddFavorite',
+          params: {uid: this.$store.state.user.uid, mid: this.$store.state.movie.id, type: type}
+        }).then((response) => {
+          if (response.data.isError) {
+            this.$message.error(response.data.message)
+          } else {
+            this.$message.success(response.data.message)
+          }
+          this.$store.state.isFavorite=response.data.isFavorite
+        })
       }
     },
     addComment() {
@@ -129,6 +154,16 @@ export default {
         item.grade = item.grade / 2;
         return item;
       })
+    })
+    requests({
+      method: 'get',
+      params: {
+        uid: JSON.stringify(this.$store.state.user) == '{}' ? 0 : this.$store.state.user.uid,
+        mid: this.$store.state.movie.id
+      },
+      url: 'http://localhost:8081/ssm/IsExistFavorite',
+    }).then(response => {
+      this.$store.state.isFavorite=response.data
     })
   }
 }

@@ -8,6 +8,7 @@ const state={
     admin:{},
     allMovieList:[],
     movie:{},
+    isFavorite:true,
     commentList:[]
 }
 const store=new Vuex.Store({

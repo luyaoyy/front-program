@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "383679",
+      "name": "空心",
+      "font_class": "kongxin",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
       "icon_id": "3153808",
       "name": "like",
       "font_class": "like",
@@ -18,6 +25,13 @@
       "font_class": "like1",
       "unicode": "e7c8",
       "unicode_decimal": 59336
+    },
+    {
+      "icon_id": "8223328",
+      "name": "爱心",
+      "font_class": "aixin",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
     }
   ]
 }

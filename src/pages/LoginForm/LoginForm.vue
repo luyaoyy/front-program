@@ -11,7 +11,8 @@
                     auto-complete="false"></el-input>
         </el-form-item>
         <el-form-item prop="password" label="密码:">
-          <el-input type="password" v-model="loginForm.password" placeholder="请输入密码" auto-complete="false" ref="aaa"
+          <el-input type="password" v-model="loginForm.password" placeholder="请输入密码" auto-complete="false"
+                    ref="aaa"
                     prefix-icon="el-icon-s-goods" show-password></el-input>
         </el-form-item>
         <el-form-item prop="code" label="验证码:">
@@ -63,7 +64,8 @@
             <el-input placeholder="请输入年龄" v-model.number="registeForm.uage"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="upassword">
-            <el-input type="password" placeholder="请输入密码" v-model="registeForm.upassword" autocomplete="off"></el-input>
+            <el-input type="password" placeholder="请输入密码" v-model="registeForm.upassword"
+                      autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="checkPass">
             <el-input type="password" placeholder="请再次输入密码" v-model="registeForm.checkPass"
@@ -86,12 +88,14 @@
         </span>
       </el-dialog>
     </div>
+    <SlideConfirm :show="isShow" @success="onSuccess" @close="isShow=false" style="z-index: 9999" />
   </div>
 </template>
 
 <script>
-import requests from "@/api/request";
-import {getCode, registe, checkName} from "@/api";
+import requests from "@/api/request"
+import {getCode, registe, checkName} from "@/api"
+import SlideConfirm from "vue-puzzle-vcode"
 
 export default {
   name: 'LoginForm',
@@ -144,6 +148,7 @@ export default {
     }
     return {
       dialogVisible: false,
+      isShow: false,
       loginForm: {
         username: "",
         password: "",
@@ -257,21 +262,7 @@ export default {
     comfireRegister() {
       this.$refs.registeForm.validate((valid) => {
         if (valid) {
-          registe({
-            uname: this.registeForm.uname,
-            uage: this.registeForm.uage,
-            upassword: this.registeForm.upassword,
-            ugender: this.registeForm.ugender,
-            uphone: this.registeForm.uphone,
-            uemail: this.registeForm.uemail,
-            uadress: this.registeForm.uadress
-          }).then(() => {
-            this.$message.success("注册成功!")
-            this.$refs.registeForm.resetFields() //表单重置
-          })
-          setTimeout(() => {
-            this.dialogVisible = false
-          }, 1000)
+          this.isShow=true
         } else {
           this.$message.error("请填写表单信息!")
         }
@@ -279,12 +270,30 @@ export default {
     },
     resetForm() {
       this.$refs.registeForm.resetFields()
+    },
+    onSuccess() {
+      this.isShow=false
+      registe({
+        uname: this.registeForm.uname,
+        uage: this.registeForm.uage,
+        upassword: this.registeForm.upassword,
+        ugender: this.registeForm.ugender,
+        uphone: this.registeForm.uphone,
+        uemail: this.registeForm.uemail,
+        uadress: this.registeForm.uadress
+      }).then(() => {
+        this.$message.success("注册成功!")
+        this.$refs.registeForm.resetFields() //表单重置
+      })
+      setTimeout(() => {
+        this.dialogVisible = false
+      }, 1000)
     }
   },
   beforeCreate() {
     document.body.style.backgroundSize = '100%'
     // document.body.style.backgroundImage = 'url(' + require('./images/loginbk.jpeg') + ')'
-    document.body.style.backgroundImage =" url('https://source.fomal.cc/img/home_bg.webp')"
+    document.body.style.backgroundImage = " url('https://source.fomal.cc/img/home_bg.webp')"
   },
   beforeDestroy() {
     document.body.style.backgroundImage = ''
@@ -295,6 +304,9 @@ export default {
     }).then(res => {
       this.loginForm.codeUrl = res;
     })
+  },
+  components: {
+    SlideConfirm
   }
 }
 </script>

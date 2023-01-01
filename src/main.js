@@ -14,6 +14,10 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts;
 new Vue({
     render: h => h(App),
+    //上面是简写
+    //render:(h)=>{
+    //  return h(App)
+    // }
     router,
     store,
     beforeCreate() {
